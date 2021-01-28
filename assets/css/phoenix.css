@@ -1,0 +1,16 @@
+/* Includes some default style for the starter application.
+ * This can be safely deleted to start fresh.
+ */
+
+/* Milligram v1.3.0 https://milligram.github.io
+ * Copyright (c) 2017 CJ Patoilo Licensed under the MIT license
+ */
+
+
+/* General style */
+
+body {
+  height: 100vh;
+  width: 100vw;
+  margin: none;
+}
