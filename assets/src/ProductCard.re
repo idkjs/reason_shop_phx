@@ -1,4 +1,5 @@
-[@bs.module "randomcolor"] [@bs.val] external randomColor: unit => string = "randomColor";
+[@bs.module "randomcolor"] [@bs.val]
+external randomColor: unit => string = "randomColor";
 
 open Css;
 module Styles = {
@@ -24,19 +25,14 @@ module Styles = {
   let product_price = style([fontSize(px(15)), textAlign(center)]);
 };
 
-let component = ReasonReact.statelessComponent("ProductCard");
-
-let make =
-    (~product: Product.t, ~selectedCustomer: option(Customer.t), _children) => {
-  ...component,
-  render: _self => {
-    <div className={Styles.product_card(150, randomColor())}>
-      <div className=Styles.product_title>
-        {ReasonReact.string(product.name)}
-      </div>
-      <div className=Styles.product_price>
-        {ReasonReact.string(string_of_float(product.price) ++ " $")}
-      </div>
-    </div>;
-  },
+[@react.component]
+let make = (~product: Product.t, ~selectedCustomer: option(Customer.t)) => {
+  <div className={Styles.product_card(150, randomColor())}>
+    <div className=Styles.product_title>
+      {ReasonReact.string(product.name)}
+    </div>
+    <div className=Styles.product_price>
+      {ReasonReact.string(string_of_float(product.price) ++ " $")}
+    </div>
+  </div>;
 };

@@ -19,19 +19,12 @@ let customers_list =
      )
   |> ReasonReact.array;
 
-let component = ReasonReact.statelessComponent("CustomersList");
-
+[@react.component]
 let make =
     (
       ~customers: Belt.Map.Int.t(Customer.t),
       ~selectCustomer: Customer.t => unit,
       ~selectedCustomer: option(Customer.t),
-      _children,
     ) => {
-  {
-    ...component,
-    render: _self => {
-      customers_list(customers, selectCustomer, selectedCustomer);
-    },
-  };
+  customers_list(customers, selectCustomer, selectedCustomer);
 };

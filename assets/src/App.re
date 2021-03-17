@@ -40,56 +40,50 @@ type action =
   | ReceiveJoinData(InitialState.t)
   | SelectCustomer(Customer.t);
 
-let reducer = (action: action, state: state) =>
+let reducer = (state: state, action: action) =>
   switch (action) {
-  | ReceiveJoinData(data) => ReasonReact.Update(loadJoinDataToState(data))
-  | SelectCustomer(customer) =>
-    ReasonReact.Update({...state, current_customer: Some(customer)})
+  | ReceiveJoinData(data) => loadJoinDataToState(data)
+  | SelectCustomer(customer) => {...state, current_customer: Some(customer)}
   };
 
-let joinEventHandler =
-    (
-      self: ReasonReact.self(state, 'a, action),
-      result: Belt.Result.t(InitialState.t, string),
-    ) =>
-  switch (result) {
-  | Belt.Result.Ok(data) => self.send(ReceiveJoinData(data))
-  | Belt.Result.Error(error) => Js.log(error)
-  };
-
-let selectCustomer =
-    (self: ReasonReact.self('a, 'b, 'c), customer: Customer.t): unit => {
-  self.send(SelectCustomer(customer));
+let initialState = {
+  customers: Belt.Map.Int.empty,
+  products: Belt.Map.Int.empty,
+  current_customer: None,
 };
+[@react.component]
+let make = _ => {
+  let (state, dispatch) = React.useReducer(reducer, initialState);
+  let selectCustomer = (customer: Customer.t): unit => {
+    dispatch(SelectCustomer(customer));
+  };
 
-let component = ReasonReact.reducerComponent("App");
-
-let make = _children => {
-  ...component,
-  initialState: () => {
-    customers: Belt.Map.Int.empty,
-    products: Belt.Map.Int.empty,
-    current_customer: None,
-  },
-  reducer,
-  didMount: self => {
-    ShopChannel.onJoin() |> Repromise.wait(joinEventHandler(self));
-  },
-  render: self => {
-    <div className=Styles.mainContainer>
-      <div className=Styles.customersColumn>
-        <CustomersList
-          customers={self.state.customers}
-          selectCustomer={selectCustomer(self)}
-          selectedCustomer={self.state.current_customer}
-        />
-      </div>
-      <div className=Styles.productsColumn>
-        <ProductsList
-          products={self.state.products}
-          selectedCustomer={self.state.current_customer}
-        />
-      </div>
-    </div>;
-  },
+  let joinEventHandler = (result: Belt.Result.t(InitialState.t, string)) =>
+    switch (result) {
+    | Belt.Result.Ok(data) => dispatch(ReceiveJoinData(data))
+    | Belt.Result.Error(error) => Js.log(error)
+    };
+  React.useEffect0(() => {
+    ShopChannel.onJoin()
+    |> Belt.Result.map(result->joinEventHandler)
+    |> resolve_promise
+    |> joinEventHandler
+    |> ignore;
+    None;
+  });
+  <div className=Styles.mainContainer>
+    <div className=Styles.customersColumn>
+      <CustomersList
+        customers={state.customers}
+        selectCustomer
+        selectedCustomer={state.current_customer}
+      />
+    </div>
+    <div className=Styles.productsColumn>
+      <ProductsList
+        products={state.products}
+        selectedCustomer={state.current_customer}
+      />
+    </div>
+  </div>;
 };

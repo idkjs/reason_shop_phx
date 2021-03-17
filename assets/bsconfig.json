@@ -18,7 +18,8 @@
     "bucklescript-phx",
     "@glennsl/bs-json",
     "reason-promise",
-    "bs-css"
+    "bs-css",
+    "bs-css-emotion"
   ],
   "refmt": 3,
   "warnings": {

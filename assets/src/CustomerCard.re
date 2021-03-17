@@ -5,8 +5,8 @@ module Styles = {
     style([
       flexDirection(column),
       width(vw(10.0)),
-      isCustomerSelected ?
-        border(px(3), solid, green) : border(px(3), none, green),
+      isCustomerSelected
+        ? border(px(3), solid, green) : border(px(3), none, green),
     ]);
 };
 
@@ -18,23 +18,19 @@ let isCustomerSelected =
   };
 };
 
-let component = ReasonReact.statelessComponent("CustomerCard");
-
+[@react.component]
 let make =
     (
       ~customer: Customer.t,
       ~selectCustomer: Customer.t => unit,
       ~selectedCustomer: option(Customer.t),
-      _children,
+      _,
     ) => {
-  ...component,
-  render: _self => {
-    <div
-      className={Styles.customerCardBox(
-        isCustomerSelected(customer, selectedCustomer),
-      )}
-      onClick={_event => selectCustomer(customer)}>
-      <div> {ReasonReact.string(customer.name)} </div>
-    </div>;
-  },
+  <div
+    className={Styles.customerCardBox(
+      isCustomerSelected(customer, selectedCustomer),
+    )}
+    onClick={_event => selectCustomer(customer)}>
+    <div> {ReasonReact.string(customer.name)} </div>
+  </div>;
 };
