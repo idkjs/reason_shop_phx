@@ -1,4 +1,6 @@
-# ReasonShop
+# Studying ReasonShop
+
+# [original repo](https://github.com/xantrac/reason_shop)
 
 ## Learn more
 
