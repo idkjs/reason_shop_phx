@@ -27,12 +27,13 @@ module Styles = {
 
 [@react.component]
 let make = (~product: Product.t, ~selectedCustomer: option(Customer.t)) => {
+ Js.log(selectedCustomer);
   <div className={Styles.product_card(150, randomColor())}>
     <div className=Styles.product_title>
-      {ReasonReact.string(product.name)}
+      {React.string(product.name)}
     </div>
     <div className=Styles.product_price>
-      {ReasonReact.string(string_of_float(product.price) ++ " $")}
+      {React.string(Js.Float.toString(product.price) ++ " $")}
     </div>
   </div>;
 };

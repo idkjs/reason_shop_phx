@@ -30,5 +30,5 @@ let getId = (purchase: t): int => purchase.id;
 let decode = (decodeFunc, json): option('a) =>
   switch (decodeFunc(json)) {
   | record => Some(record)
-  | exception (Json.Decode.DecodeError(error)) => None
+  | exception (Json.Decode.DecodeError(_error)) => None
   };

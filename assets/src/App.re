@@ -58,19 +58,30 @@ let make = _ => {
     dispatch(SelectCustomer(customer));
   };
 
-  let joinEventHandler = (result: Belt.Result.t(InitialState.t, string)) =>
+  let joinEventHandler = result =>
     switch (result) {
     | Belt.Result.Ok(data) => dispatch(ReceiveJoinData(data))
     | Belt.Result.Error(error) => Js.log(error)
     };
   React.useEffect0(() => {
-    ShopChannel.onJoin()
-    |> Belt.Result.map(result->joinEventHandler)
-    |> resolve_promise
-    |> joinEventHandler
-    |> ignore;
+    ShopChannel.onJoin()->Promise.get(result => joinEventHandler(result));
     None;
   });
+  // React.useEffect0(() => {
+  //   ShopChannel.onJoin()
+  //   ->Promise.get(result =>
+  //       switch (result) {
+  //       | Belt.Result.Ok(data) => dispatch(ReceiveJoinData(data))
+  //       | Belt.Result.Error(error) => Js.log(error)
+  //       }
+  //     );
+  //   None;
+  // });
+
+  // ->Promise.getOk(result => result|>joinEventHandler)
+  // ->Promise.getOk(result => result|>joinEventHandler)
+  // None;
+  // });
   <div className=Styles.mainContainer>
     <div className=Styles.customersColumn>
       <CustomersList

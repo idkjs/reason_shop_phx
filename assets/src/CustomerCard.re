@@ -31,6 +31,6 @@ let make =
       isCustomerSelected(customer, selectedCustomer),
     )}
     onClick={_event => selectCustomer(customer)}>
-    <div> {ReasonReact.string(customer.name)} </div>
+    <div> {React.string(customer.name)} </div>
   </div>;
 };

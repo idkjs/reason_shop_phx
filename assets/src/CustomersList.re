@@ -6,7 +6,7 @@ let customers_list =
       selectCustomer: Customer.t => unit,
       selectedCustomer: option(Customer.t),
     )
-    : ReasonReact.reactElement =>
+    : React.element =>
   customersMap
   |> Map.intMapToArray
   |> Belt.Array.map(_, (customer: Customer.t) =>
@@ -17,7 +17,7 @@ let customers_list =
          selectedCustomer
        />
      )
-  |> ReasonReact.array;
+  |> React.array;
 
 [@react.component]
 let make =

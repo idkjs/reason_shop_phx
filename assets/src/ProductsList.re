@@ -5,7 +5,7 @@ let products_list =
       customersMap: Belt.Map.Int.t(Product.t),
       selectedCustomer: option(Customer.t),
     )
-    : ReasonReact.reactElement =>
+    : React.element =>
   customersMap
   |> Map.intMapToArray
   |> Belt.Array.map(_, (product: Product.t) =>
@@ -15,7 +15,7 @@ let products_list =
          selectedCustomer
        />
      )
-  |> ReasonReact.array;
+  |> React.array;
 
 [@react.component]
 let make =

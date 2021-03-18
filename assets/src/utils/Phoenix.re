@@ -23,13 +23,13 @@ module CreateChannel = (WS: WebSocketInterface) => {
   let myJoinEvent: ref(option(WS.Push.t)) = ref(None);
 
   let getSocket = (): WS.Socket.t =>
-    getOrInit(mySocket, () => WS.initSocket("/socket") |> WS.connectSocket);
+    getOrInit(mySocket, () => WS.initSocket("/socket") |> WS.connectSocket(_));
 
   let getChannel = (): WS.Channel.t =>
-    getOrInit(myChannel, () => getSocket() |> WS.initChannel("main"));
+    getOrInit(myChannel, () => getSocket() |> WS.initChannel("main",_));
 
   let getJoinEvent = (): WS.Push.t =>
-    getOrInit(myJoinEvent, () => getChannel() |> WS.joinChannel);
+    getOrInit(myJoinEvent, () => getChannel() |> WS.joinChannel(_));
 
   let sendPush = (event: string, payload: Js.t('a)): WS.Push.t =>
     WS.push(event, payload, getChannel());
